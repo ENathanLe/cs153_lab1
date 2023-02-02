@@ -23,7 +23,10 @@ sys_exit(int status)
 int
 sys_wait(void)
 {
-  return wait(0);   //todo: finish with the correct pointer for status
+  if(argint(1, &n) < 0)
+    return -1;
+  int *status = argptr (1 , (int*)&ct ,sizeof(*ct));
+  return wait(status);   //todo: finish with the correct pointer for status
 }
 
 int
@@ -101,5 +104,14 @@ int
 sys_getparents(void)
 {
     getparents();
+    return 0;
+}
+
+int
+sys_waitpid(void)
+{
+    if(argint(1, &n) < 0)
+        return -1;
+    waitpid(pid, argptr (1 , (int*)&ct ,sizeof(*ct)), 0); //todo: again, no clue what the *status should be
     return 0;
 }

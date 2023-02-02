@@ -552,3 +552,17 @@ getparents(void)
     }while(curproc->parent);
 
 }
+
+int
+waitpid(int pid, int *status, int options)
+{
+    int p = fork();
+    if (p > 0){ // in parent process
+        cprintf("the child's pid is %d", p);
+        if (p == pid){
+            p = wait(status);
+            return 1;       //todo: i don't think this is right
+        }
+    }
+    return -1;
+}
