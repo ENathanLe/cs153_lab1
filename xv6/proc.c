@@ -225,7 +225,7 @@ fork(void)
 // An exited process remains in the zombie state
 // until its parent calls wait() to find out it exited.
 void
-exit(void)
+exit(int status)
 {
   struct proc *curproc = myproc();
   struct proc *p;
@@ -263,6 +263,7 @@ exit(void)
 
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
+  curproc->status = status;
   sched();
   panic("zombie exit");
 }
@@ -270,7 +271,7 @@ exit(void)
 // Wait for a child process to exit and return its pid.
 // Return -1 if this process has no children.
 int
-wait(void)
+wait(int *status)       //todo: prevent process execution until children have been terminated, update the child status to *status
 {
   struct proc *p;
   int havekids, pid;
@@ -295,6 +296,8 @@ wait(void)
         p->name[0] = 0;
         p->killed = 0;
         p->state = UNUSED;
+        if(*status) //todo: if status is NULL discard status
+            p->status = *status;     //todo: check this is how this is supposed to work
         release(&ptable.lock);
         return pid;
       }
