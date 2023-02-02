@@ -532,3 +532,20 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+void
+hello(void){
+    cprintf("\n\n Hello from your kernel space! \n\n");
+}
+
+void
+getparents(void)
+{
+    struct proc *curproc = myproc();
+    if(!curproc->parent) return;
+    do{
+        cprintf("\n parent id: %d", curproc->parent->pid);
+        curproc = curproc->parent;
+    }while(curproc->parent);
+
+}
