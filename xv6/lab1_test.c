@@ -26,8 +26,8 @@ int main(int argc, char *argv[])
 
 
 int getParent(void) {
-    printf("\nYou need to print the pids in your system call\n");
-    printf("\n an example \n current proc name test\n parent name sh, pid 2\n parent name init, pid 1\n")
+    printf(1, "\nYou need to print the pids in your system call\n");
+    printf(1, "\n an example \n current proc name test\n parent name sh, pid 2\n parent name init, pid 1\n");
     getparents();
     return 0;
 }
@@ -80,7 +80,7 @@ int waitPid(void){
     sleep(5);
     printf(1, "\n This is the parent: Now waiting for child with PID# %d\n",pid_a[3]);
     ret_pid = waitpid(pid_a[3], &exit_status, 0);
-    printf(1, "\n This is the partent: Child# %d has exited with status %d, expected: %d\n",ret_pid, exit_status, pid_a[3] + 4);
+    printf(1, "\n This is the parent: Child# %d has exited with status %d, expected: %d\n",ret_pid, exit_status, pid_a[3] + 4);
     sleep(5);
     printf(1, "\n This is the parent: Now waiting for child with PID# %d\n",pid_a[1]);
     ret_pid = waitpid(pid_a[1], &exit_status, 0);
@@ -88,11 +88,11 @@ int waitPid(void){
     sleep(5);
     printf(1, "\n This is the parent: Now waiting for child with PID# %d\n",pid_a[2]);
     ret_pid = waitpid(pid_a[2], &exit_status, 0);
-    printf(1, "\n This is the partent: Child# %d has exited with status %d, expected: %d\n",ret_pid, exit_status, pid_a[2] + 4);
+    printf(1, "\n This is the parent: Child# %d has exited with status %d, expected: %d\n",ret_pid, exit_status, pid_a[2] + 4);
     sleep(5);
     printf(1, "\n This is the parent: Now waiting for child with PID# %d\n",pid_a[0]);
     ret_pid = waitpid(pid_a[0], &exit_status, 0);
-    printf(1, "\n This is the partent: Child# %d has exited with status %d, expected: %d\n",ret_pid, exit_status, pid_a[0] + 4);
+    printf(1, "\n This is the parent: Child# %d has exited with status %d, expected: %d\n",ret_pid, exit_status, pid_a[0] + 4);
     sleep(5);
     printf(1, "\n This is the parent: Now waiting for child with PID# %d\n",pid_a[4]);
     ret_pid = waitpid(pid_a[4], &exit_status, 0);
