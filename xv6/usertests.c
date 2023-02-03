@@ -21,7 +21,7 @@ iputtest(void)
 
   if(mkdir("iputdir") < 0){
     printf(stdout, "mkdir failed\n");
-    exit(0);        //todo: find correct exit status and wait *status for all cases
+    exit(0);        //todo: find correct wait *status for all cases
   }
   if(chdir("iputdir") < 0){
     printf(stdout, "chdir iputdir failed\n");

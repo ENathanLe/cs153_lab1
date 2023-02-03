@@ -297,7 +297,7 @@ wait(int *status)       //todo: prevent process execution until children have be
         p->killed = 0;
         p->state = UNUSED;
         if(*status) //todo: if status is NULL discard status
-            p->status = *status;     //todo: check this is how this is supposed to work
+            status = &(p->status);     //todo: check this is how this is supposed to work
         release(&ptable.lock);
         return pid;
       }

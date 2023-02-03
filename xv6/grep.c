@@ -43,7 +43,7 @@ main(int argc, char *argv[])
 
   if(argc <= 1){
     printf(2, "usage: grep pattern [file ...]\n");
-    exit(0);    //todo: determine correct exit status for all cases
+    exit(0);
   }
   pattern = argv[1];
 

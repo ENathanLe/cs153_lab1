@@ -24,7 +24,7 @@ main(void)
     pid = fork();
     if(pid < 0){
       printf(1, "init: fork failed\n");
-      exit(0);      //todo: determine correct exit status for all cases
+      exit(0);
     }
     if(pid == 0){
       exec("sh", argv);

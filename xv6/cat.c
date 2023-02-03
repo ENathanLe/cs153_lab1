@@ -12,7 +12,7 @@ cat(int fd)
   while((n = read(fd, buf, sizeof(buf))) > 0) {
     if (write(1, buf, n) != n) {
       printf(1, "cat: write error\n");
-      exit(0);  //todo: determine correct exit status to use in all cases
+      exit(0);
     }
   }
   if(n < 0){

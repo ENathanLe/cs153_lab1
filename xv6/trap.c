@@ -38,11 +38,11 @@ trap(struct trapframe *tf)
 {
   if(tf->trapno == T_SYSCALL){
     if(myproc()->killed)
-      exit(0);  //todo: find correct exit status
+      exit(0);
     myproc()->tf = tf;
     syscall();
     if(myproc()->killed)
-      exit(0);  //todo: find correct exit status
+      exit(0);
     return;
   }
 

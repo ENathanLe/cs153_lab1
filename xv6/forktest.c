@@ -25,7 +25,7 @@ forktest(void)
     if(pid < 0)
       break;
     if(pid == 0)
-      exit(0);  //todo: determine correct exit status for all cases
+      exit(0);
   }
 
   if(n == N){

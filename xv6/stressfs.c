@@ -43,7 +43,7 @@ main(int argc, char *argv[])
     read(fd, data, sizeof(data));
   close(fd);
 
-  wait(0);  //todo: wait *status and exit status
+  wait(0);  //todo: wait *status
 
   exit(0);
 }
