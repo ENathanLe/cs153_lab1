@@ -256,6 +256,7 @@ exit(int status)
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->parent == curproc){
       p->parent = initproc;
+      p->status = status;
       if(p->state == ZOMBIE)
         wakeup1(initproc);
     }
@@ -264,6 +265,7 @@ exit(int status)
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
   curproc->status = status;
+  //cprintf("exit status: %d, argument status: %d\n", curproc->status, status);
   sched();
   panic("zombie exit");
 }
@@ -296,8 +298,9 @@ wait(int *status)       //todo: prevent process execution until children have be
         p->name[0] = 0;
         p->killed = 0;
         p->state = UNUSED;
-        if(*status) //todo: if status is NULL discard status
-            status = &(p->status);     //todo: check this is how this is supposed to work
+        *status = p->status;     //todo: check this is how this is supposed to work
+        //cprintf("status: %d, *status: %d, p->status: %d\n", status, *status, p->status);
+
         release(&ptable.lock);
         return pid;
       }
@@ -554,15 +557,45 @@ getparents(void)
 }
 
 int
-waitpid(int pid, int *status, int options)
+waitpid(int pid, int *status, int options)       //todo: prevent process execution until children have been terminated, update the child status to *status
 {
-    int p = fork();
-    if (p > 0){ // in parent process
-        cprintf("the child's pid is %d", p);
-        if (p == pid){
-            p = wait(status);
-            return 1;       //todo: i don't think this is right
+    struct proc *p;
+    int found;
+    struct proc *curproc = myproc();
+
+    acquire(&ptable.lock);
+    for(;;){
+        // Scan through table looking for exited children.
+        found = 0;
+        for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+            if(p->pid != pid)
+                continue;
+            found = 1;
+            if(p->state == ZOMBIE){
+                // Found it
+                pid = p->pid;
+                kfree(p->kstack);
+                p->kstack = 0;
+                freevm(p->pgdir);
+                p->pid = 0;
+                p->parent = 0;
+                p->name[0] = 0;
+                p->killed = 0;
+                p->state = UNUSED;
+                if(*status) //todo: if status is NULL discard status
+                    *status = p->status;     //todo: check this is how this is supposed to work
+                release(&ptable.lock);
+                return pid;
+            }
         }
+
+        // No point waiting if we don't have any children.
+        if(!found || curproc->killed){
+            release(&ptable.lock);
+            return -1;
+        }
+
+        // Wait for children to exit.  (See wakeup1 call in proc_exit.)
+        sleep(curproc, &ptable.lock);  //DOC: wait-sleep
     }
-    return -1;
 }
